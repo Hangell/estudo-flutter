@@ -3,6 +3,7 @@ import 'package:exemplo/pages/hello_page2.dart';
 import 'package:exemplo/pages/hello_page3.dart';
 import 'package:exemplo/utils/nav.dart';
 import 'package:exemplo/widgets/blue_button.dart';
+import 'package:exemplo/widgets/drawer_list.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
@@ -10,22 +11,44 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ToastContext().init(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Teste Flutter",
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Teste Flutter",
+          ),
+          centerTitle: true,
+          bottom: TabBar(tabs: [
+            Tab(
+              text: "TAB 1",
+            ),
+            Tab(
+              text: "TAB 2",
+            ),
+            Tab(
+              text: "TAB 3",
+            ),
+          ]),
         ),
-        centerTitle: true,
-      ),
-      body: _body(context),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          _onClickFab();
-        },
-      ),
-      drawer: Container(
-        color: Colors.amber
+        body: TabBarView(
+          children: [
+            _body(context),
+            Container(
+              color: Colors.green,
+            ),
+            Container(
+              color: Colors.yellow,
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            _onClickFab();
+          },
+        ),
+        drawer: DrawerList(),
       ),
     );
   }
@@ -37,7 +60,7 @@ class HomePage extends StatelessWidget {
   _body(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      padding: EdgeInsets.only(top: 16),
+        padding: EdgeInsets.only(top: 16),
         color: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -117,30 +140,31 @@ class HomePage extends StatelessWidget {
   }
 
   _onClickDialog(BuildContext context) {
-    showDialog(context: context,
+    showDialog(
+        context: context,
         barrierDismissible: false,
         builder: (context) {
-      return WillPopScope(
-        onWillPop: () async => false,
-        child: AlertDialog(
-          title: Text("Flutter é muito legal"),
-          actions: <Widget>[
-            TextButton(
-              child: Text("Cancelar"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+          return WillPopScope(
+            onWillPop: () async => false,
+            child: AlertDialog(
+              title: Text("Flutter é muito legal"),
+              actions: <Widget>[
+                TextButton(
+                  child: Text("Cancelar"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                TextButton(
+                  child: Text("OK"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
             ),
-            TextButton(
-              child: Text("OK"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      );
-    });
+          );
+        });
   }
 
   _onClickToast() {
